@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentação do Projeto LFS</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        pre {
+            background: #eee;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        code {
+            font-family: "Courier New", monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>Documentação Detalhada do Projeto LFS</h1>
+    
+    <h2>1. Configuração Inicial do Ambiente LFS</h2>
+    <h3>1.1. Criando a Estrutura de Diretórios do LFS</h3>
+    <p>Para iniciar o projeto Linux From Scratch (LFS), crie a estrutura de diretórios no sistema principal (Debian):</p>
+    <pre><code>mkdir -pv $LFS/{etc,var} $LFS/usr/{bin,lib,sbin}</code></pre>
+    <p>Criação de links simbólicos:</p>
+    <pre><code>for i in bin lib sbin; do
+  ln -sv usr/$i $LFS/$i
+done</code></pre>
+    <p>Se for um sistema x86_64, crie também o diretório lib64:</p>
+    <pre><code>case $(uname -m) in
+  x86_64) mkdir -pv $LFS/lib64 ;;
+esac</code></pre>
+    
+    <h2>2. Configuração do Usuário LFS</h2>
+    <h3>2.1. Criando o Usuário LFS</h3>
+    <p>Execute os comandos abaixo como root:</p>
+    <pre><code>useradd -m -s /bin/bash lfs
+passwd lfs</code></pre>
+    <p>Conceda permissões ao usuário:</p>
+    <pre><code>chown -v lfs $LFS/{usr,lib,var,etc,tools}
+chown -v lfs $LFS/home/lfs</code></pre>
+    <p>Troque para o usuário LFS:</p>
+    <pre><code>su - lfs</code></pre>
+    
+    <h3>2.2. Criando o .bash_profile</h3>
+    <pre><code>cat > ~/.bash_profile << "EOF"
+exec env -i HOME=$HOME TERM=$TERM PS1='\u:\w\$ ' /bin/bash
+EOF</code></pre>
+    
+    <h3>2.3. Criando o .bashrc</h3>
+    <pre><code>cat > ~/.bashrc << "EOF"
+set +h
+umask 022
+LFS=/mnt/lfs
+LC_ALL=POSIX
+LFS_TGT=$(uname -m)-lfs-linux-gnu
+PATH=/usr/bin
+if [ ! -L /bin ]; then PATH=/bin:$PATH; fi
+PATH=$LFS/tools/bin:$PATH
+CONFIG_SITE=$LFS/usr/share/config.site
+export LFS LC_ALL LFS_TGT PATH CONFIG_SITE
+EOF</code></pre>
+    <p>Para aplicar as mudanças:</p>
+    <pre><code>source ~/.bash_profile</code></pre>
+    
+    <h2>3. Evitando Conflitos com o Sistema Principal</h2>
+    <pre><code>[ ! -e /etc/bash.bashrc ] || mv -v /etc/bash.bashrc /etc/bash.bashrc.NOUSE</code></pre>
+    
+    <h2>4. Otimizando o Processo de Compilação</h2>
+    <pre><code>cat >> ~/.bashrc << "EOF"
+export MAKEFLAGS=-j$(nproc)
+EOF</code></pre>
+    
+    <h2>5. Gerenciamento da Swap no LFS</h2>
+    <h3>5.1. Verificando a Swap</h3>
+    <pre><code>cat /proc/swaps</code></pre>
+    <h3>5.2. Desativando a Swap do LFS no Debian</h3>
+    <pre><code>sudo swapoff /dev/sdb1
+sudo nano /etc/fstab</code></pre>
+    <p>Comente a linha correspondente à swap do LFS e bloqueie a ativação:</p>
+    <pre><code>sudo systemctl mask dev-sdb1.swap</code></pre>
+    <p>Para ativar manualmente:</p>
+    <pre><code>sudo swapon /dev/sdb1</code></pre>
+    
+    <h2>6. Verificando e Ajustando o fstab</h2>
+    <pre><code>cat /etc/fstab</code></pre>
+    
+    <h2>Conclusão</h2>
+    <p>Agora seu ambiente LFS está configurado e pronto para a compilação do sistema! 🚀</p>
+</body>
+</html>
