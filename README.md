@@ -35,11 +35,14 @@ Esse curso segue um processo que pode afetar partições e sistemas. Sempre test
 
 ## 📂 Estrutura deste Repositório
 
+```
+
 ├── scripts/            # Scripts criados ou adaptados durante o curso
 ├── imagens/            # Screenshots e recursos visuais usados
 ├── docs/               # Arquivos markdown detalhando cada etapa
 └── README.md           # Este arquivo
 
+```
 
 ## ✅ Progresso
 - [x] Parte 1 - Introdução
