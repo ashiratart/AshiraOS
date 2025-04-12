@@ -5,7 +5,7 @@ Este repositório é parte do curso em vídeo desenvolvido por [Seu Nome/Canal],
 > **Nota**: Este projeto é educativo e visa ajudar tanto iniciantes curiosos quanto usuários mais experientes que desejam compreender em profundidade o funcionamento de um sistema Linux.
 
 ## 🎥 Playlist do Curso
-[Link para a playlist do YouTube]
+[Link para a playlist do YouTube](https://www.youtube.com/watch?v=ds5fQWljjfA&list=PLvVmUcmU825oIYkVoEN6WDitoHcTItn3n)
 
 ## 🧱 Estrutura do Curso
 
